@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Safe Ride Request</title>
+
+  <!-- 'viewport' is used by bootstrap to respond to device size -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Javascript:  JQuery from a content distribution network (CDN) -->
+  <script
+     src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+  </script>
+
+  <!-- Bootstrap includes javascript and css  (must follow jquery) -->
+  <link rel="stylesheet"
+   href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+   <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
+  </script>
+
+   <link rel="stylesheet" href="/static/css/memos.css" />
+
+</head>
+<body>
+
+<div id="fullContainerRider" class="container">
+
+  <h1>Submit a Ride Request</h1>
+  <div class="row">
+    <div class="col-xs-12">
+      <label for="date">Pickup Time</label>
+      <input type="text" class="form-control"
+       name="Date" id='date' placeholder="Select from dropdown"/>
+  </div>
+  <div class="col-xs-12">
+    <label for="rideRequest">Pickup Location</label>
+    <input type="text" class="form-control"
+      name="Location" id='pickUp' placeholder="EG: 550 E 13th Ave"/>
+  </div>
+  <div class="col-xs-12">
+    <label for="rideRequest">Dropoff Location</label>
+    <input type="text" class="form-control"
+      name="Location" id='dropOff' placeholder="EG: 945 Patterson"/>
+  </div>
+  <div class="col-xs-12">
+    <label for="rideRequest"># of Riders</label>
+    <select id="numOfRiders">
+        <option>1</option>
+        <option>2</option>
+        <option>2</option>
+    </select>
+  </div>
+
+
+
+  <div class="col-xs-12">
+    <button id="create">Request Ride</button>
+  </div>
+
+ </div>
+
+<!-- Flashed messages before content -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+</div> <!-- container -->
+
+
+
+<div id="fullContainerDispatch" class="container">
+
+<h1>Ride Queue</h1>
+
+{% if session.rideRequests %}
+    {% for rideRequest in session.rideRequests %}
+  <div class="rideRequest">
+  <div class="row">
+  <div class="subrow" style="border: thin solid black">
+  <div class="col-md-2">
+    {{ rideRequest.date | humanize }}
+  </div>
+  <div class="col-md-8">
+    {{ rideRequest.text }}
+  </div>
+  </div>
+  <div class="col-md-2">
+    <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Delete Ride Request</button>
+  </div>
+  </div> <!-- row -->
+  </div> <!-- rideRequest -->
+  <br>
+  {% endfor %}
+{% else %}
+  <p>No ride requests </p>  
+{% endif %}
+
+</div> <!-- container -->
+
+<!-- JS to insert into Python for DB processing  -->
+<script type="text/javascript">
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+      //pass open times
+      $('#create').click(
+          // ... execute this function
+          function(){
+              var date = $('#date').val();
+              var rideRequest = $('#rideRequest').val();
+
+              //AJAX call
+              $.getJSON($SCRIPT_ROOT + '/_createrideRequest',
+                  // The object to pass to the server
+                  {date: date, rideRequest: rideRequest},
+                  // The function to call with the response
+                  function(data) {
+                    location.reload(true);
+                  }); // End of the call to getJSON
+
+     });   // end of what we do on document ready
+
+        function deleterideRequest(rideRequestID){
+
+            var objectID = rideRequestID;
+            console.log(objectID);
+            $.getJSON($SCRIPT_ROOT + '/_delete',
+            // The object to pass to the server
+            {objectID: objectID},
+                  // The function to call with the response
+                  function(data) {
+                    location.reload(true);
+                  }); // End of the call to getJSON
+        };
+
+</script>
+
+</body>
+</html>
