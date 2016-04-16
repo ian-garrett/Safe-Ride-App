@@ -24,38 +24,19 @@
 
 <div id="fullContainerRider" class="container">
 
-  <h1>Submit a Ride Request</h1>
-  <div class="row">
-    <div class="col-xs-12">
-      <label for="date">Pickup Time</label>
-      <input type="text" class="form-control"
-       name="Date" id='date' placeholder="Select from dropdown"/>
-  </div>
-  <div class="col-xs-12">
-    <label for="rideRequest">Pickup Location</label>
+<h1>Create a Memo</h1>
+<div class="row">
+    <div class="col-md-2">
     <input type="text" class="form-control"
-      name="Location" id='pickUp' placeholder="EG: 550 E 13th Ave"/>
+     name="Date" id='date' placeholder="DD/MM/YYYY"/>
   </div>
-  <div class="col-xs-12">
-    <label for="rideRequest">Dropoff Location</label>
+  <div class="col-md-8">
     <input type="text" class="form-control"
-      name="Location" id='dropOff' placeholder="EG: 945 Patterson"/>
+      name="Riderequest" id='rideRequest' placeholder="Type memo in this box"/>
   </div>
-  <div class="col-xs-12">
-    <label for="rideRequest"># of Riders</label>
-    <select id="numOfRiders">
-        <option>1</option>
-        <option>2</option>
-        <option>2</option>
-    </select>
+  <div class="col-md-2">
+    <button id="create">Create Memo</button>
   </div>
-
-
-
-  <div class="col-xs-12">
-    <button id="create">Request Ride</button>
-  </div>
-
  </div>
 
 <!-- Flashed messages before content -->
