@@ -101,7 +101,7 @@
 <div id="header">
   <h1>Ride Queue</h1>
 </div>
-<div id="fullContainerDispatch" class="container">
+<div id="fullContainerDispatch">
 
 {% if session.rideRequests %}
     {% for rideRequest in session.rideRequests %}
@@ -110,31 +110,31 @@
     <div class="subrow">
 
     <div class="col-xs-4">
-      <b>Name:</b><br> {{ rideRequest.name }}
+      <b class="secondaryColor">Name:</b><br> {{ rideRequest.name }}
     </div>
     <div class="col-xs-4">
-      <b>Cellphone Number:</b><br> {{ rideRequest.cellphone }}
+      <b class="secondaryColor" class="accent">Cellphone Number:</b><br> {{ rideRequest.cellphone }}
     </div>
     <div class="col-xs-4">
-      <b>Student ID:</b><br> {{ rideRequest.studentID }}
+      <b class="secondaryColor">Student ID:</b><br> {{ rideRequest.studentID }}
     </div>
     <div class="col-xs-4">
-      <b>Pickup Time:</b><br> {{ rideRequest.pickupTime }}
+      <b class="secondaryColor">Pickup Time:</b><br> {{ rideRequest.pickupTime }}
     </div>
     <div class="col-xs-4">
-      <b>Pickup Location:</b><br> {{ rideRequest.pickupLoc }}
+      <b class="secondaryColor">Pickup Location:</b><br> {{ rideRequest.pickupLoc }}
     </div>
     <div class="col-xs-4">
-      <b>Dropoff Location:</b><br> {{ rideRequest.dropoffLoc }}
+      <b class="secondaryColor">Dropoff Location:</b><br> {{ rideRequest.dropoffLoc }}
     </div>
     <div class="col-xs-4">
-      <b>Number of Passengers:</b><br> {{ rideRequest.passengers }}
+      <b class="secondaryColor">Number of Passengers:</b><br> {{ rideRequest.passengers }}
     </div>
     <div class="col-xs-4">
-      <b>Number of Bikes:</b><br> {{ rideRequest.bikes }}
+      <b class="secondaryColor">Number of Bikes:</b><br> {{ rideRequest.bikes }}
     </div>
     <div class="col-xs-4">
-      <b>User Strikes:</b><br> NEED TO CONNECT
+      <b class="secondaryColor">User Strikes:</b><br> NEED TO CONNECT
     </div>
 
     </div>
@@ -142,7 +142,7 @@
       <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Ride Completed</button>
     </div>
     <div class="col-xs-12 col-sm-6">
-      <button id="strike" onclick="">Rider No-Show(CONNECT)</button>
+      <button id="strike" onclick="">No-Show(CONNECT)</button>
     </div>
     </div> <!-- row -->
   </div> <!-- rideRequest -->

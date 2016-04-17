@@ -61,11 +61,11 @@ button {
 }
 
 .rideRequest {
-	margin-top: 20px;
 	background-color: #064B2F;
     color: #F4F400;
     border: 5px solid #F4F400;
     padding: 15px 15px;
+    margin: 20px 20px 20px 20px;
 
 }
 
@@ -81,6 +81,22 @@ button {
 #strike {
 	background-color: #FF7772;
 	border-color: #FF7772;
+}
+
+#fullContainerDispatcher {
+	background-color: #064B2F;
+    color: #F4F400;
+    border: 5px solid #F4F400;
+    border-radius: 10px;
+    margin-top: 40px;
+}
+
+.col-xs-4:not(b) {
+	color: white;
+}
+
+.secondaryColor {
+	color: #F4F400;
 }
 
 
