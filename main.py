@@ -54,7 +54,11 @@ def page_not_found(error):
                                  badurl=request.base_url,
                                  linkback=url_for("index")), 404
 
-#main functions
+# main functions
+
+
+# ride request functions
+
 def get_rideRequests():
     """
     Returns all rideRequests in the database, in a form that
@@ -102,16 +106,7 @@ def createrideRequest():
   return jsonify(result="add success")
   
 
-
-@app.route('/_delete')
-def python_method_for_delete():
-  """
-  Deletes entry by ID
-  """
-  rideRequestID = request.args.get('objectID', 0, type=str) 
-  collection.remove({'_id': ObjectId(rideRequestID)}) 
-  return jsonify(result="delete success") 
-
+# user functions
 
 def put_user(name, cellphone, studentID):
     """
@@ -139,7 +134,7 @@ def createUser():
   put_user(name,cellphone,studentID)
   return jsonify(result="add success")
 
-
+# other functions
 
 @app.route('/_delete')
 def python_method_for_delete():
