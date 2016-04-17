@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
-<title>Safe Ride Request</title>
+<title>Memos</title>
 
   <!-- 'viewport' is used by bootstrap to respond to device size -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,47 +15,29 @@
    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
    <script
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
-  </script>
+</script>
 
+   <!-- Our own style sheet -->
    <link rel="stylesheet" href="/static/css/memos.css" />
 
 </head>
 <body>
 
-<div id="fullContainerRider" class="container">
+<div class="container">
 
-  <h1>Submit a Ride Request</h1>
-  <div class="row">
-    <div class="col-xs-12">
-      <label for="date">Pickup Time</label>
-      <input type="text" class="form-control"
-       name="Date" id='date' placeholder="Select from dropdown"/>
-  </div>
-  <div class="col-xs-12">
-    <label for="rideRequest">Pickup Location</label>
+  <h1>Create a Memo</h1>
+<div class="row">
+    <div class="col-md-2">
     <input type="text" class="form-control"
-      name="Location" id='pickUp' placeholder="EG: 550 E 13th Ave"/>
+     name="Date" id='date' placeholder="DD/MM/YYYY"/>
   </div>
-  <div class="col-xs-12">
-    <label for="rideRequest">Dropoff Location</label>
+  <div class="col-md-8">
     <input type="text" class="form-control"
-      name="Location" id='dropOff' placeholder="EG: 945 Patterson"/>
+      name="Memo" id='memo' placeholder="Type memo in this box"/>
   </div>
-  <div class="col-xs-12">
-    <label for="rideRequest"># of Riders</label>
-    <select id="numOfRiders">
-        <option>1</option>
-        <option>2</option>
-        <option>2</option>
-    </select>
+  <div class="col-md-2">
+    <button id="create">Create Memo</button>
   </div>
-
-
-
-  <div class="col-xs-12">
-    <button id="create">Request Ride</button>
-  </div>
-
  </div>
 
 <!-- Flashed messages before content -->
@@ -69,35 +51,29 @@
   {% endif %}
 {% endwith %}
 
-</div> <!-- container -->
+<h1>Memos</h1>
 
-
-
-<div id="fullContainerDispatch" class="container">
-
-<h1>Ride Queue</h1>
-
-{% if session.rideRequests %}
-    {% for rideRequest in session.rideRequests %}
-  <div class="rideRequest">
+{% if session.memos %}
+    {% for memo in session.memos %}
+  <div class="memo">
   <div class="row">
   <div class="subrow" style="border: thin solid black">
   <div class="col-md-2">
-    {{ rideRequest.date | humanize }}
+    {{ memo.date | humanize }}
   </div>
   <div class="col-md-8">
-    {{ rideRequest.text }}
+    {{ memo.text }}
   </div>
   </div>
   <div class="col-md-2">
-    <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Delete Ride Request</button>
+    <button id="delete" onclick="deleteMemo('{{memo._id}}')">Delete Memo</button>
   </div>
   </div> <!-- row -->
-  </div> <!-- rideRequest -->
+  </div> <!-- memo -->
   <br>
   {% endfor %}
 {% else %}
-  <p>No ride requests </p>  
+  <p>No memos for you. </p>  
 {% endif %}
 
 </div> <!-- container -->
@@ -111,12 +87,12 @@
           // ... execute this function
           function(){
               var date = $('#date').val();
-              var rideRequest = $('#rideRequest').val();
+              var memo = $('#memo').val();
 
               //AJAX call
-              $.getJSON($SCRIPT_ROOT + '/_createrideRequest',
+              $.getJSON($SCRIPT_ROOT + '/_createMemo',
                   // The object to pass to the server
-                  {date: date, rideRequest: rideRequest},
+                  {date: date, memo: memo},
                   // The function to call with the response
                   function(data) {
                     location.reload(true);
@@ -124,9 +100,12 @@
 
      });   // end of what we do on document ready
 
-        function deleterideRequest(rideRequestID){
+        function deleteMemo(memoID){
+          /*
+          Function to obtain ID from row user wants to delete, sends to flask for deletion
+          */
 
-            var objectID = rideRequestID;
+            var objectID = memoID;
             console.log(objectID);
             $.getJSON($SCRIPT_ROOT + '/_delete',
             // The object to pass to the server
