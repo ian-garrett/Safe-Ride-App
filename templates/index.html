@@ -29,19 +29,19 @@
 <div class="row">
 
   <div class="col-xs-12 col-sm-6">
-    <label for="name">Name:</label><br>
+    <label for="studentID">UO StudentID Number:</label><br>
     <input type="text" class="form-control"
-     name="Name" id='name' placeholder="Name"/>
+      name="StudentID" id='studentID' placeholder="studentID"/>
   </div>
-  <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12 col-sm-6">
     <label for="cellphone">Cellphone Number:</label><br>
     <input type="text" class="form-control"
       name="Cellphone" id='cellphone' placeholder="cellphone"/>
   </div>
   <div class="col-xs-12 col-sm-6">
-    <label for="studentID">UO StudentID Number:</label><br>
+    <label for="name">Name:</label><br>
     <input type="text" class="form-control"
-      name="StudentID" id='studentID' placeholder="studentID"/>
+     name="Name" id='name' placeholder="Name"/>
   </div>
   <div class="col-xs-12 col-sm-6">
     <label for="pickupTime">Desired Pick Up Time:</label><br>
@@ -68,7 +68,7 @@
     <select>
   </div>
   <div class="col-xs-12 col-sm-6">
-    <label for="bikes">Number of Bikes:(flip-switch y/n?)</label><br>
+    <label for="bikes">Number of Bikes:</label><br>
     <select class="form-control"
       name="Bikes" id='bikes'/>
       <option>0</option>
@@ -97,49 +97,64 @@
 </div> <!-- container -->
 
 
-
+<div id="dispatcherPage">
+<div id="header">
+  <h1>Ride Queue</h1>
+</div>
 <div id="fullContainerDispatch" class="container">
-
-<h1>Ride Queue</h1>
 
 {% if session.rideRequests %}
     {% for rideRequest in session.rideRequests %}
   <div class="rideRequest">
-  <div class="row">
-  <div class="subrow" style="border: thin solid black">
+    <div class="row">
+    <div class="subrow">
 
-  <div class="col-xs-4">
-    <b>Name:</b><br> {{ rideRequest.name }}
-  </div>
-  <div class="col-xs-4">
-    <b>Cellphone Number:</b><br> {{ rideRequest.cellphone }}
-  </div>
-  <div class="col-xs-4">
-    <b>Student ID:</b><br> {{ rideRequest.studentID }}
-  </div>
-  <div class="col-xs-4">
-    <b>Pickup Time:</b><br> {{ rideRequest.pickupTime }}
-  </div>
-  <div class="col-xs-4">
-    <b>Pickup Location:</b><br> {{ rideRequest.pickupLoc }}
-  </div>
-  <div class="col-xs-4">
-    <b>Dropoff Location:</b><br> {{ rideRequest.dropoffLoc }}
-  </div>
+    <div class="col-xs-4">
+      <b>Name:</b><br> {{ rideRequest.name }}
+    </div>
+    <div class="col-xs-4">
+      <b>Cellphone Number:</b><br> {{ rideRequest.cellphone }}
+    </div>
+    <div class="col-xs-4">
+      <b>Student ID:</b><br> {{ rideRequest.studentID }}
+    </div>
+    <div class="col-xs-4">
+      <b>Pickup Time:</b><br> {{ rideRequest.pickupTime }}
+    </div>
+    <div class="col-xs-4">
+      <b>Pickup Location:</b><br> {{ rideRequest.pickupLoc }}
+    </div>
+    <div class="col-xs-4">
+      <b>Dropoff Location:</b><br> {{ rideRequest.dropoffLoc }}
+    </div>
+    <div class="col-xs-4">
+      <b>Number of Passengers:</b><br> {{ rideRequest.passengers }}
+    </div>
+    <div class="col-xs-4">
+      <b>Number of Bikes:</b><br> {{ rideRequest.bikes }}
+    </div>
+    <div class="col-xs-4">
+      <b>User Strikes:</b><br> NEED TO CONNECT
+    </div>
 
-  </div>
-  <div class="col-xs-12">
-    <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Delete Ride Request</button>
-  </div>
-  </div> <!-- row -->
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Ride Completed</button>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <button id="strike" onclick="">Rider No-Show(CONNECT)</button>
+    </div>
+    </div> <!-- row -->
   </div> <!-- rideRequest -->
   <br>
   {% endfor %}
 {% else %}
+  <br>
   <p>No ride requests </p>  
 {% endif %}
 
 </div> <!-- container -->
+</div> <!-- full dispatch page -->
 
 <!-- JS to insert into Python for DB processing  -->
 <script type="text/javascript">
