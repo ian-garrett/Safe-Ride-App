@@ -121,7 +121,7 @@ def put_user(name, cellphone, studentID):
                "name": name,
                "cellphone": cellphone,
                "studentID": studentID,
-               "strikes": 0;
+               "strikes": 0
 	 }
     collection.insert(record)
     return
