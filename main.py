@@ -113,6 +113,43 @@ def python_method_for_delete():
   return jsonify(result="delete success") 
 
 
+def put_user(name, cellphone, studentID):
+    """
+    Place user into database with appropriate attributes
+    """
+    record = { "type": "user",
+               "name": name,
+               "cellphone": cellphone,
+               "studentID": studentID,
+               "strikes": 0;
+	 }
+    collection.insert(record)
+    return
+
+
+@app.route("/_createUser")
+def createUser():
+  """
+  Get request info and create user user input
+  """
+  name = request.args.get('name', 0, type=str)
+  cellphone = request.args.get('cellphone', 0, type=str)
+  studentID = request.args.get('studentID', 0, type=str)
+
+  put_user(name,cellphone,studentID)
+  return jsonify(result="add success")
+
+
+
+@app.route('/_delete')
+def python_method_for_delete():
+  """
+  Deletes entry by ID
+  """
+  rideRequestID = request.args.get('objectID', 0, type=str)
+  collection.remove({'_id': ObjectId(rideRequestID)})
+  return jsonify(result="delete success")
+
 
 if __name__ == "__main__":
     app.debug=CONFIG.DEBUG
