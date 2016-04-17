@@ -74,7 +74,7 @@ def get_rideRequests():
     return records
 
 
-def put_rideRequest(name, cellphone, studentID, pickupTime, pickupLoc, dropoffLoc):
+def put_rideRequest(name, cellphone, studentID, pickupTime, pickupLoc, dropoffLoc, passengers, bikes):
     """
     Place rideRequest into database with appropriate attributes
     """
@@ -85,6 +85,8 @@ def put_rideRequest(name, cellphone, studentID, pickupTime, pickupLoc, dropoffLo
                "pickupTime": pickupTime,
                "pickupLoc": pickupLoc,
                "dropoffLoc": dropoffLoc,
+               "passengers": passengers,
+               "bikes": bikes,
             }
     collection.insert(record)
     return
@@ -101,8 +103,10 @@ def createrideRequest():
   pickupTime = request.args.get('pickupTime', 0, type=str)
   pickupLoc = request.args.get('pickupLoc', 0, type=str)
   dropoffLoc = request.args.get('dropoffLoc', 0, type=str)
+  passengers = request.args.get('passengers', 0, type=str)
+  bikes = request.args.get('bikes', 0, type=str)
 
-  put_rideRequest(name,cellphone,studentID,pickupTime,pickupLoc,dropoffLoc) 
+  put_rideRequest(name,cellphone,studentID,pickupTime,pickupLoc,dropoffLoc,passengers,bikes) 
   return jsonify(result="add success")
   
 
@@ -117,13 +121,13 @@ def put_user(name, cellphone, studentID):
                "cellphone": cellphone,
                "studentID": studentID,
                "strikes": 0
-	 }
+   }
     collection.insert(record)
     return
 
 
-@app.route("/_createUser")
-def createUser():
+@app.route("/_createuser")
+def createuser():
   """
   Get request info and create user user input
   """
