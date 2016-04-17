@@ -25,6 +25,7 @@
 
 <div class="container">
 
+<<<<<<< HEAD
   <h1>Create a Memo</h1>
 <div class="row">
     <div class="col-md-2">
@@ -38,6 +39,50 @@
   <div class="col-md-2">
     <button id="create">Create Memo</button>
   </div>
+=======
+<h1>Submit a Ride Request</h1>
+<!--   Needed fields: Name, cellphone, studentID, pickuptime, pickupLoc, dropoffLoc,  -->
+<div class="row">
+        <div class="col-md-2">
+    <input type="text" class="form-control"
+     name="Date" id='date' placeholder="DD/MM/YYYY"/>
+  </div>
+  <div class="col-md-8">
+    <input type="text" class="form-control"
+      name="Memo" id='rideRequest' placeholder="Type memo in this box"/>
+  </div>
+
+
+
+    <div class="col-xs-12">
+    <input type="text" class="form-control"
+     name="Name" id='name' placeholder="Name"/>
+  </div>
+  <div class="col-xs-12">
+    <input type="text" class="form-control"
+      name="Cellphone" id='cellphone' placeholder="cellphone"/>
+  </div>
+  <div class="col-xs-12">
+    <input type="text" class="form-control"
+      name="StudentID" id='studentID' placeholder="studentID"/>
+  </div>
+  <div class="col-xs-12">
+    <input type="text" class="form-control"
+      name="PickupTime" id='pickupTime' placeholder="pickupTime"/>
+  </div>
+  <div class="col-xs-12">
+    <input type="text" class="form-control"
+      name="PickupLoc" id='pickupLoc' placeholder="pickupLoc"/>
+  </div>
+  <div class="col-xs-12">
+    <input type="text" class="form-control"
+      name="DropoffLoc" id='dropoffLoc' placeholder="dropoffLoc"/>
+  </div>
+
+  <div class="col-xs-12">
+    <button id="create">Submit Ride Request</button>
+  </div>
+>>>>>>> 6892e0dad9b784dfe405eec868e3c4155056dc87
  </div>
 
 <!-- Flashed messages before content -->
@@ -61,8 +106,13 @@
   <div class="col-md-2">
     {{ memo.date | humanize }}
   </div>
+<<<<<<< HEAD
   <div class="col-md-8">
     {{ memo.text }}
+=======
+  <div class="col-xs-12">
+    {{ rideRequest.text }}
+>>>>>>> 6892e0dad9b784dfe405eec868e3c4155056dc87
   </div>
   </div>
   <div class="col-md-2">
@@ -89,10 +139,23 @@
               var date = $('#date').val();
               var memo = $('#memo').val();
 
+              var name = $('#name').val();
+              var cellphone = $('#cellphone').val();
+              var studentID = $('#studentID').val();
+              var pickupTime = $('#pickupTime').val();
+              var pickupLoc = $('#pickupLoc').val();
+              var dropoffLoc = $('#dropoffLoc').val();
+
               //AJAX call
               $.getJSON($SCRIPT_ROOT + '/_createMemo',
                   // The object to pass to the server
+<<<<<<< HEAD
                   {date: date, memo: memo},
+=======
+                  {date: date, rideRequest: rideRequest,
+                    name: name, cellphone: cellphone, studentID: studentID, pickupTime: pickupTime, pickupLoc: pickupLoc, dropoffLoc: dropoffLoc,
+                  },
+>>>>>>> 6892e0dad9b784dfe405eec868e3c4155056dc87
                   // The function to call with the response
                   function(data) {
                     location.reload(true);
