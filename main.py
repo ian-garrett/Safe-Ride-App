@@ -36,7 +36,7 @@ app.secret_key = str(uuid.uuid4())
 
 
 
-#routing functions
+# ROUTING FUNCTIONS
 @app.route("/")
 @app.route("/index")
 def index():
@@ -44,6 +44,9 @@ def index():
   flask.session['rideRequests'] = get_rideRequests()
   for rideRequest in flask.session['rideRequests']:
       app.logger.debug("rideRequest: " + str(rideRequest))
+
+  # strikes = collection.find( { "type": "rideRequestID", "studentID": "123" } )
+  # print(strikes["strike"])
   return flask.render_template('index.html')
 
 
@@ -57,7 +60,7 @@ def page_not_found(error):
 # main functions
 
 
-# ride request functions
+# RIDE REQUEST FUNCTIONS
 
 def get_rideRequests():
     """
@@ -103,19 +106,22 @@ def createrideRequest():
   pickupTime = request.args.get('pickupTime', 0, type=str)
   pickupLoc = request.args.get('pickupLoc', 0, type=str)
   dropoffLoc = request.args.get('dropoffLoc', 0, type=str)
-  passengers = request.args.get('passengers', 0, type=str)
-  bikes = request.args.get('bikes', 0, type=str)
+  passengers = request.args.get('passengers', 0, type=int)
+  bikes = request.args.get('bikes', 0, type=int)
 
   put_rideRequest(name,cellphone,studentID,pickupTime,pickupLoc,dropoffLoc,passengers,bikes) 
   return jsonify(result="add success")
   
 
-# user functions
+# USER FUNCTIONS
+
+# create user functions
 
 def put_user(name, cellphone, studentID):
     """
     Place user into database with appropriate attributes
     """
+    print(name,cellphone,studentID)
     record = { "type": "user",
                "name": name,
                "cellphone": cellphone,
@@ -138,7 +144,53 @@ def createuser():
   put_user(name,cellphone,studentID)
   return jsonify(result="add success")
 
+# user strike functions
+
+def incrementStike(studentID):
+  """
+  Increase user strikes by 1
+  """
+  print("entering increment strike")
+  strikes = collection.find( { "type": "user", "studentID": studentID } )
+  print("found entry")
+  strikeCount = strikes[0]["strikes"]+1
+  print(strikeCount)
+  collection.update_one( { "studentID": '123' } , { "strikes": 1} )
+  print("finished update")
+  return
+
+
+@app.route("/_addStrike")
+def addStrike():
+  """
+  Calls the incrementStike on a studentID
+  """
+  print("entering add strike")
+  studentID = request.args.get('studentID', 0, type=str)
+  incrementStike(studentID)
+  print("finished incrementStike")
+  return jsonify(result="add success")
+
+
 # other functions
+
+@app.route('/_checkID')
+def checkID():
+  """
+  check if a user had has an account
+  """
+  studentID = request.args.get('studentID', 0, type=str)
+  entryCount = collection.find( { "type": "user", "studentID": studentID } ).count();
+
+  print(entryCount)
+
+  if entryCount == 0:
+    print("no account associated with that studentID")
+    return jsonify(result="true")
+  else:
+    print("account already exists")
+    return jsonify(result="false")
+
 
 @app.route('/_delete')
 def python_method_for_delete():

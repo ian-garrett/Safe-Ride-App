@@ -98,7 +98,7 @@
 
 
 <div id="dispatcherPage">
-<div id="header">
+<div id="dispatchHeader">
   <h1>Ride Queue</h1>
 </div>
 <div id="fullContainerDispatch">
@@ -142,7 +142,7 @@
       <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Ride Completed</button>
     </div>
     <div class="col-xs-12 col-sm-6">
-      <button id="strike" onclick="">No-Show(CONNECT)</button>
+      <button id="strike" onclick="addStrike('{{rideRequest.studentID}}','{{rideRequest._id}}')">No-Show</button>
     </div>
     </div> <!-- row -->
   </div> <!-- rideRequest -->
@@ -182,10 +182,11 @@
                   },
                   // The function to call with the response
                   function(data) {
-                    location.reload(true);
+                    // location.reload(true);
+                    checkID(studentID);
                   }); // End of the call to getJSON
 
-     });   // end of what we do on document ready
+     }); 
 
         function deleterideRequest(rideRequestID){
 
@@ -199,6 +200,52 @@
                     location.reload(true);
                   }); // End of the call to getJSON
         };
+
+
+        function addStrike(studentID,rideRequestID){
+            console.log(studentID);
+            $.getJSON($SCRIPT_ROOT + '/_addStrike',
+            // The object to pass to the server
+            {studentID: studentID},
+                  // The function to call with the response
+                  function(data) {
+                    deleterideRequest(rideRequestID);
+                    alert("success");
+                  }); // End of the call to getJSON
+        };
+
+
+        function createUser(studentID,name,cellphone){
+            $.getJSON($SCRIPT_ROOT + '/_createuser',
+            // The object to pass to the server
+            {studentID: studentID, name:name, cellphone:cellphone},
+                  // The function to call with the response
+                  function(data) {
+                    // deleterideRequest(rideRequestID);
+                    // alert("success");
+                  }); // End of the call to getJSON
+        };
+
+        function checkID(studentID){
+            $.getJSON($SCRIPT_ROOT + '/_checkID',
+            // The object to pass to the server
+            {studentID: studentID},
+                  // The function to call with the response
+                  function(data) {
+                    // deleterideRequest(rideRequestID);
+                    if (data['result']=="true"){
+                      var name = $('#name').val();
+                      var cellphone = $('#cellphone').val();
+                      createUser(studentID,name,cellphone);
+                      alert("success");
+                    }
+                    else{
+                      alert("failure");
+                    }
+                  }); // End of the call to getJSON
+        };
+
+       
 
 </script>
 

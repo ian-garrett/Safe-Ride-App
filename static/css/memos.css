@@ -53,11 +53,12 @@ button {
 
 /*Dispatcher styling*/
 
-#header {
+#dispatchHeader {
 	background-color: #064B2F;
     color: #F4F400;
     border-bottom: 5px solid #F4F400;
-    text-align: center
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .rideRequest {
@@ -65,7 +66,7 @@ button {
     color: #F4F400;
     border: 5px solid #F4F400;
     padding: 15px 15px;
-    margin: 20px 20px 20px 20px;
+    margin: 0 20px 0 20px;
 
 }
 
