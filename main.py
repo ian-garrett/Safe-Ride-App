@@ -14,6 +14,7 @@ import datetime
 from dateutil import tz
 
 # Mongo database
+from pymongo import *
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
@@ -152,11 +153,13 @@ def incrementStike(studentID):
   """
   print("entering increment strike")
   strikes = collection.find( { "type": "user", "studentID": studentID } )
-  print("found entry")
-  strikeCount = strikes[0]["strikes"]+1
-  print(strikeCount)
-  collection.update_one( { "studentID": '123' } , { "strikes": 1} )
-  print("finished update")
+  strikeCount = strikes[0]["strikes"]
+  if strikeCount==0: # for some reason it takes two updates when strikes is at 0
+    print("0 strikes thus far")
+    collection.update({"studentID": studentID}, {"$inc": {"strikes": 1}})
+
+  collection.update({"studentID": studentID}, {"$inc": {"strikes": 1}})
+  print(collection.find( { "type": "user", "studentID": studentID } )[0]["strikes"])
   return
 
 
