@@ -8,11 +8,6 @@ from flask import render_template
 import json
 import logging
 
-# Date handling 
-import arrow
-import datetime
-from dateutil import tz
-
 # Mongo database
 from pymongo import *
 from pymongo import MongoClient
@@ -45,10 +40,30 @@ def index():
   flask.session['rideRequests'] = get_rideRequests()
   for rideRequest in flask.session['rideRequests']:
       app.logger.debug("rideRequest: " + str(rideRequest))
-
-  # strikes = collection.find( { "type": "rideRequestID", "studentID": "123" } )
-  # print(strikes["strike"])
   return flask.render_template('index.html')
+
+
+@app.route("/dispatcher")
+def dispatcher():
+  app.logger.debug("Dispatcher page entry")
+
+  # check user login parameters from the URL
+  username = request.args.get('username')
+  password = request.args.get('password')
+
+  # this will allow to check database for when multiple users have been created
+  # for dispatcher in collection.find( { "type": "dispatcher" } ).sort("name", 1):
+  #       if dispatcher['username']==username and dispatcher['password']==password:
+  #         return flask.render_template('dispatcher.html')
+
+
+  # return flask.render_template('loginFail.html')
+
+  # this hardcoded check will suffice for the current scope of the project and demonstration purposes
+  if username=="igarrett" and password=="maythesourcebewithyou":
+    return flask.render_template('dispatcher.html')
+  return flask.render_template('loginFail.html')
+
 
 
 @app.errorhandler(404)
