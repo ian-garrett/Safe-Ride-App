@@ -1,10 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
-<html> 
-<head>
-<title>Safe Ride Request</title>
+<html> <head>
+<title>Safe Ride Dispatcher</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <script
      src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js">
   </script>
@@ -20,80 +18,64 @@
 </head>
 <body>
 
-<div id="fullContainerRider" class="container">
 
-<h1>Submit a Ride Request</h1>
-<!--   Needed fields: Name, cellphone, studentID, pickuptime, pickupLoc, dropoffLoc, number of passengers, number of bikes  -->
-<div class="row">
+<div id="dispatcherPage">
+<div id="dispatchHeader">
+  <h1>Ride Queue</h1>
+</div>
+<div id="fullContainerDispatch">
 
-  <div class="col-xs-12 col-sm-6">
-    <label for="studentID">UO StudentID Number:</label><br>
-    <input type="text" class="form-control"
-      name="StudentID" id='studentID' placeholder="951xxxxxxx"/>
-  </div>
+{% if session.rideRequests %}
+    {% for rideRequest in session.rideRequests %}
+  <div class="rideRequest">
+    <div class="row">
+    <div class="subrow">
+
+    <div class="col-xs-4">
+      <b class="secondaryColor">Name:</b><br> {{ rideRequest.name }}
+    </div>
+    <div class="col-xs-4">
+      <b class="secondaryColor" class="accent">Cellphone Number:</b><br> {{ rideRequest.cellphone }}
+    </div>
+    <div class="col-xs-4">
+      <b class="secondaryColor">Student ID:</b><br> {{ rideRequest.studentID }}
+    </div>
+    <div class="col-xs-4">
+      <b class="secondaryColor">Pickup Time:</b><br> {{ rideRequest.pickupTime }}
+    </div>
+    <div class="col-xs-4">
+      <b class="secondaryColor">Pickup Location:</b><br> {{ rideRequest.pickupLoc }}
+    </div>
+    <div class="col-xs-4">
+      <b class="secondaryColor">Dropoff Location:</b><br> {{ rideRequest.dropoffLoc }}
+    </div>
+    <div class="col-xs-4">
+      <b class="secondaryColor">Number of Passengers:</b><br> {{ rideRequest.passengers }}
+    </div>
+    <div class="col-xs-4">
+      <b class="secondaryColor">Number of Bikes:</b><br> {{ rideRequest.bikes }}
+    </div>
+
+
+
+    </div>
     <div class="col-xs-12 col-sm-6">
-    <label for="cellphone">Cellphone Number:</label><br>
-    <input type="text" class="form-control"
-      name="Cellphone" id='cellphone' placeholder="503-xxx-xxxx"/>
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <label for="name">Name:</label><br>
-    <input type="text" class="form-control"
-     name="Name" id='name' placeholder="First Last"/>
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <label for="pickupTime">Desired Pick Up Time:</label><br>
-    <input type="text" class="form-control"
-      name="PickupTime" id='pickupTime' placeholder="pickupTime"/>
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <label for="pickupLoc">Pick Up Location:</label><br>
-    <input type="text" class="form-control"
-      name="PickupLoc" id='pickupLoc' placeholder="must be within 3 miles of campus"/>
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <label for="dropoffLoc">Drop Off Location:</label><br>
-    <input type="text" class="form-control"
-      name="DropoffLoc" id='dropoffLoc' placeholder="must be within 3 miles of campus"/>
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <label for="passengers">Number of Passengers:</label><br>
-    <select class="form-control"
-      name="Passengers" id='passengers'/>
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-    <select>
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <label for="bikes">Number of Bikes:</label><br>
-    <select class="form-control"
-      name="Bikes" id='bikes'/>
-      <option>0</option>
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-    </select> 
-  </div>
-
-  <div class="col-xs-12">
-    <button id="create">Submit Ride Request</button>
-  </div>
- </div>
-
-<!-- Flashed messages before content -->
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+      <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Ride Completed</button>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <button id="strike" onclick="addStrike('{{rideRequest.studentID}}','{{rideRequest._id}}')">No-Show</button>
+    </div>
+    </div> <!-- row -->
+  </div> <!-- rideRequest -->
+  <br>
+  {% endfor %}
+{% else %}
+  <br>
+  <p>No ride requests </p>  
+{% endif %}
 
 </div> <!-- container -->
-
+</div> <!-- full dispatch page -->
 
 <!-- JS to insert into Python for DB processing  -->
 <script type="text/javascript">
@@ -139,6 +121,7 @@
             {objectID: objectID},
                   // The function to call with the response
                   function(data) {
+
                     location.reload(true);
                   }); // End of the call to getJSON
         };
@@ -173,7 +156,6 @@
             {studentID: studentID},
                   // The function to call with the response
                   function(data) {
-                    // deleterideRequest(rideRequestID);
                     if (data['result']=="true"){
                       var name = $('#name').val();
                       var cellphone = $('#cellphone').val();
