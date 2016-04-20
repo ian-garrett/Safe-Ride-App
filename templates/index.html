@@ -95,6 +95,8 @@
 </div> <!-- container -->
 
 
+
+
 <!-- JS to insert into Python for DB processing  -->
 <script type="text/javascript">
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -125,7 +127,8 @@
                   },
                   // The function to call with the response
                   function(data) {
-                    location.reload(true);
+                    $('#fullContainerDispatch').load(document.URL +  ' #fullContainerDispatch');
+                    //location.reload(true);
                   }); // End of the call to getJSON
 
      }); 
@@ -138,7 +141,7 @@
             // The object to pass to the server
             {objectID: objectID},
                   // The function to call with the response
-                  function(data) {
+                  function(data) { 
                     location.reload(true);
                   }); // End of the call to getJSON
         };

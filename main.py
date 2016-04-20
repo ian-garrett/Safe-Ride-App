@@ -46,7 +46,7 @@ def index():
 @app.route("/dispatcher")
 def dispatcher():
   app.logger.debug("Dispatcher page entry")
-
+  flask.session['rideRequests'] = get_rideRequests()
   # check user login parameters from the URL
   username = request.args.get('username')
   password = request.args.get('password')

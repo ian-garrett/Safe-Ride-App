@@ -27,33 +27,33 @@
 
 {% if session.rideRequests %}
     {% for rideRequest in session.rideRequests %}
-  <div class="rideRequest">
+  <div id="{{ rideRequest._id }}" class="rideRequest">
     <div class="row">
     <div class="subrow">
 
     <div class="col-xs-4">
-      <b class="secondaryColor">Name:</b><br> {{ rideRequest.name }}
+      <b class="secondaryColor">Name:</b> {{ rideRequest.name }}
     </div>
     <div class="col-xs-4">
-      <b class="secondaryColor" class="accent">Cellphone Number:</b><br> {{ rideRequest.cellphone }}
+      <b class="secondaryColor" class="accent">Cellphone Number:</b> {{ rideRequest.cellphone }}
     </div>
     <div class="col-xs-4">
-      <b class="secondaryColor">Student ID:</b><br> {{ rideRequest.studentID }}
+      <b class="secondaryColor">Student ID:</b> {{ rideRequest.studentID }}
     </div>
     <div class="col-xs-4">
-      <b class="secondaryColor">Pickup Time:</b><br> {{ rideRequest.pickupTime }}
+      <b class="secondaryColor">Pickup Time:</b> {{ rideRequest.pickupTime }}
     </div>
     <div class="col-xs-4">
-      <b class="secondaryColor">Pickup Location:</b><br> {{ rideRequest.pickupLoc }}
+      <b class="secondaryColor">Pickup Location:</b> {{ rideRequest.pickupLoc }}
     </div>
     <div class="col-xs-4">
-      <b class="secondaryColor">Dropoff Location:</b><br> {{ rideRequest.dropoffLoc }}
+      <b class="secondaryColor">Dropoff Location:</b> {{ rideRequest.dropoffLoc }}
     </div>
     <div class="col-xs-4">
-      <b class="secondaryColor">Number of Passengers:</b><br> {{ rideRequest.passengers }}
+      <b class="secondaryColor">Number of Passengers:</b> {{ rideRequest.passengers }}
     </div>
     <div class="col-xs-4">
-      <b class="secondaryColor">Number of Bikes:</b><br> {{ rideRequest.bikes }}
+      <b class="secondaryColor">Number of Bikes:</b> {{ rideRequest.bikes }}
     </div>
 
 
@@ -67,11 +67,11 @@
     </div>
     </div> <!-- row -->
   </div> <!-- rideRequest -->
-  <br>
+  
   {% endfor %}
 {% else %}
-  <br>
-  <p>No ride requests </p>  
+  
+<!--   <p>No ride requests </p>  --> 
 {% endif %}
 
 </div> <!-- container -->
@@ -107,7 +107,7 @@
                   },
                   // The function to call with the response
                   function(data) {
-                    location.reload(true);
+                    //location.reload(true);
                   }); // End of the call to getJSON
 
      }); 
@@ -121,8 +121,8 @@
             {objectID: objectID},
                   // The function to call with the response
                   function(data) {
-
-                    location.reload(true);
+                    $("#"+rideRequestID).remove(); //Live delete, no need to reload :)
+                    // location.reload(true);
                   }); // End of the call to getJSON
         };
 
