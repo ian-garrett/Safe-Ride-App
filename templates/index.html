@@ -15,7 +15,7 @@
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
   </script>
 
-   <link rel="stylesheet" href="/static/css/memos.css" />
+   <link rel="stylesheet" href="/static/css/safeRide.css" />
 
 </head>
 <body>
@@ -127,36 +127,13 @@
                   },
                   // The function to call with the response
                   function(data) {
-                    $('#fullContainerDispatch').load(document.URL +  ' #fullContainerDispatch');
+                    // checkStrikes(studentID);
+                    confirmRide();
                     //location.reload(true);
                   }); // End of the call to getJSON
 
      }); 
 
-        function deleterideRequest(rideRequestID){
-
-            var objectID = rideRequestID;
-            console.log(objectID);
-            $.getJSON($SCRIPT_ROOT + '/_delete',
-            // The object to pass to the server
-            {objectID: objectID},
-                  // The function to call with the response
-                  function(data) { 
-                    location.reload(true);
-                  }); // End of the call to getJSON
-        };
-
-
-        function addStrike(studentID,rideRequestID){
-            console.log(studentID);
-            $.getJSON($SCRIPT_ROOT + '/_addStrike',
-            // The object to pass to the server
-            {studentID: studentID},
-                  // The function to call with the response
-                  function(data) {
-                    deleterideRequest(rideRequestID);
-                  }); // End of the call to getJSON
-        };
 
 
         function createUser(studentID,name,cellphone){
@@ -183,9 +160,42 @@
                       createUser(studentID,name,cellphone);
                     }
                     else{
+                      checkStrikes(studentID);
                     }
                   }); // End of the call to getJSON
         };
+
+        function checkStrikes(studentID){
+            console.log(studentID);
+            console.log("check strikes called");
+
+            $.getJSON($SCRIPT_ROOT + '/_checkStrikes',
+            // The object to pass to the server
+            {studentID: studentID},
+                  // The function to call with the response
+                  function(data) {
+                    // console.log(data['result']);
+                    // if (data['data']=='false'){
+                    //   strikeLimit();
+                    // }
+                  }); // End of the call to getJSON
+        };
+
+
+        function confirmRide(){
+          //function to alert the user that their ride request has been submitted
+            $('#fullContainerRider').empty();
+            $('#fullContainerRider').addClass("postSubmitContainer");
+            $('#fullContainerRider').css('text-align','center');
+            $('#fullContainerRider').html("<h2 class='col-xs-12'>We have recieved your ride request!</h2><h4 id='responseFooter' class='col-xs-12 col-sm-8 col-sm-offset-2'>We will contact you if the time you requested is unavailable. Otherwise, expect to see us at the pickup location specified at the time specified. REMEMBER, we will only wait at your pickup location for ten minutes after arrival, so please be at the exact location you specified by your requested pickup time!</h4>");
+        }
+
+        function strikeLimit(){
+          //function that alerts user that they have 3 strikes and that there ride will not be submitted
+            $('#fullContainerRider').empty();
+            $('#fullContainerRider').css('text-align','center');
+            $('#fullContainerRider').html("<h4>Looks like you have had three no-shows.<br>So now you want a ride?</h4><div class='gif'><iframe src='//giphy.com/embed/LDBuYzAwu8L4I' width='480' height='271' frameBorder='0' class='giphy-embed' allowFullScreen></iframe><p><a href='http://giphy.com/gifs/LDBuYzAwu8L4I'></a></p></div>");
+        }
 
        
 
