@@ -129,7 +129,6 @@ def put_rideRequest(name, cellphone, studentID, pickupTime, pickupLoc, dropoffLo
                "bikes": bikes,
                "assigned": "false",
                "resolved": "false",
-
             }
     collection.insert(record)
     return
@@ -148,6 +147,7 @@ def createrideRequest():
   dropoffLoc = request.args.get('dropoffLoc', 0, type=str)
   passengers = request.args.get('passengers', 0, type=int)
   bikes = request.args.get('bikes', 0, type=int)
+  passFail = request.args.get('bikes', 0, type=str)
 
   put_rideRequest(name,cellphone,studentID,pickupTime,pickupLoc,dropoffLoc,passengers,bikes) 
   return jsonify(result="add success")
@@ -173,14 +173,8 @@ def checkStrikes():
   print("entering checkstrikes")
   strikes = collection.find( { "type": "user", "studentID": studentID } )
   strikeCount = strikes[0]["strikes"]
-  print("strikes retrieved")
-  print("STRIKECOUNT")
-  print(strikeCount)
-  if strikeCount>=3:
-    print("strikes checked")
-    return jsonify(result="true")
-  print("if over")
-  return jsonify(result="false")
+  
+  return jsonify(result=strikeCount)
 
 # USER FUNCTIONS
 

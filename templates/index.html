@@ -15,7 +15,7 @@
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
   </script>
 
-   <link rel="stylesheet" href="/static/css/memos.css" />
+   <link rel="stylesheet" href="/static/css/safeRide.css" />
 
 </head>
 <body>
@@ -44,17 +44,17 @@
   <div class="col-xs-12 col-sm-6">
     <label for="pickupTime">Desired Pick Up Time:</label><br>
     <input type="text" class="form-control"
-      name="PickupTime" id='pickupTime' placeholder="pickupTime"/>
+      name="PickupTime" id='pickupTime' placeholder="HH:MM PM/AM"/>
   </div>
   <div class="col-xs-12 col-sm-6">
     <label for="pickupLoc">Pick Up Location:</label><br>
     <input type="text" class="form-control"
-      name="PickupLoc" id='pickupLoc' placeholder="must be within 3 miles of campus"/>
+      name="PickupLoc" id='pickupLoc' placeholder="within 3 miles of campus"/>
   </div>
   <div class="col-xs-12 col-sm-6">
     <label for="dropoffLoc">Drop Off Location:</label><br>
     <input type="text" class="form-control"
-      name="DropoffLoc" id='dropoffLoc' placeholder="must be within 3 miles of campus"/>
+      name="DropoffLoc" id='dropoffLoc' placeholder="within 3 miles of campus"/>
   </div>
   <div class="col-xs-12 col-sm-6">
     <label for="passengers">Number of Passengers:</label><br>
@@ -78,6 +78,7 @@
 
   <div class="col-xs-12">
     <button id="create">Submit Ride Request</button>
+    <input type="checkbox" id="agree"> <label for="agree">Checking this box will let us make sure you are eligible for SafeRide.</label>
   </div>
  </div>
 
@@ -93,8 +94,6 @@
 {% endwith %}
 
 </div> <!-- container -->
-
-
 
 
 <!-- JS to insert into Python for DB processing  -->
@@ -113,22 +112,17 @@
               var dropoffLoc = $('#dropoffLoc').val();
               var passengers = $('#passengers').val();
               var bikes = $('#bikes').val();
-
-
-              //handle studentID check/user creation
-              checkID(studentID);
-
+              // var notes = $('#notes').val();
 
               //AJAX call
               $.getJSON($SCRIPT_ROOT + '/_createrideRequest',
                   // The object to pass to the server
                   {
-                    name: name, cellphone: cellphone, studentID: studentID, pickupTime: pickupTime, pickupLoc: pickupLoc, dropoffLoc: dropoffLoc, passengers, bikes
+                    name: name, cellphone: cellphone, studentID: studentID, pickupTime: pickupTime, pickupLoc: pickupLoc, dropoffLoc: dropoffLoc, passengers: passengers, bikes: bikes
                   },
                   // The function to call with the response
                   function(data) {
                     confirmRide();
-                    //location.reload(true);
                   }); // End of the call to getJSON
 
      }); 
@@ -176,7 +170,6 @@
             {studentID: studentID},
                   // The function to call with the response
                   function(data) {
-                    // deleterideRequest(rideRequestID);
                     if (data['result']=="true"){
                       var name = $('#name').val();
                       var cellphone = $('#cellphone').val();
@@ -189,18 +182,14 @@
         };
 
         function checkStrikes(studentID){
-            console.log(studentID);
-            console.log("check strikes called");
-
             $.getJSON($SCRIPT_ROOT + '/_checkStrikes',
             // The object to pass to the server
             {studentID: studentID},
                   // The function to call with the response
                   function(data) {
                     console.log("STRIKES CHECKED");
-                    console.log(data['result']);
                     // console.log(data['result']);
-                    if (data['result']=='true'){
+                    if (data['result']>=3){
                       strikeLimit();
                     }
                   }); // End of the call to getJSON
@@ -219,8 +208,21 @@
           //function that alerts user that they have 3 strikes and that there ride will not be submitted
             $('#fullContainerRider').empty();
             $('#fullContainerRider').css('text-align','center');
-            $('#fullContainerRider').html("<h4>Looks like you have had three no-shows.<br>So now you want a ride?</h4><div class='gif'><iframe src='//giphy.com/embed/LDBuYzAwu8L4I' width='480' height='271' frameBorder='0' class='giphy-embed' allowFullScreen></iframe><p><a href='http://giphy.com/gifs/LDBuYzAwu8L4I'></a></p></div>");
+            $('#fullContainerRider').html("<h4>So... we checked your studentID.<br>Looks like you have had three no-shows.<br>So now you want a ride?</h4><div class='gif'><iframe src='//giphy.com/embed/LDBuYzAwu8L4I' width='480' height='271' frameBorder='0' class='giphy-embed' allowFullScreen></iframe></div>");
         }
+
+
+        //FUNCTION BINDINGS
+
+        $('#agree').change(function(){
+          var checked = $('#agree').is(":checked");
+          if (checked){
+            var studentID = $('#studentID').val();
+            checkID(studentID);
+          }
+
+        })
+
 
        
 
