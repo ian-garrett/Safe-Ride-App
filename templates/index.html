@@ -15,7 +15,7 @@
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
   </script>
 
-   <link rel="stylesheet" href="/static/css/safeRide.css" />
+   <link rel="stylesheet" href="/static/css/memos.css" />
 
 </head>
 <body>
@@ -127,13 +127,36 @@
                   },
                   // The function to call with the response
                   function(data) {
-                    // checkStrikes(studentID);
-                    confirmRide();
+                    $('#fullContainerDispatch').load(document.URL +  ' #fullContainerDispatch');
                     //location.reload(true);
                   }); // End of the call to getJSON
 
      }); 
 
+        function deleterideRequest(rideRequestID){
+
+            var objectID = rideRequestID;
+            console.log(objectID);
+            $.getJSON($SCRIPT_ROOT + '/_delete',
+            // The object to pass to the server
+            {objectID: objectID},
+                  // The function to call with the response
+                  function(data) { 
+                    location.reload(true);
+                  }); // End of the call to getJSON
+        };
+
+
+        function addStrike(studentID,rideRequestID){
+            console.log(studentID);
+            $.getJSON($SCRIPT_ROOT + '/_addStrike',
+            // The object to pass to the server
+            {studentID: studentID},
+                  // The function to call with the response
+                  function(data) {
+                    deleterideRequest(rideRequestID);
+                  }); // End of the call to getJSON
+        };
 
 
         function createUser(studentID,name,cellphone){
@@ -160,24 +183,7 @@
                       createUser(studentID,name,cellphone);
                     }
                     else{
-                      checkStrikes(studentID);
                     }
-                  }); // End of the call to getJSON
-        };
-
-        function checkStrikes(studentID){
-            console.log(studentID);
-            console.log("check strikes called");
-
-            $.getJSON($SCRIPT_ROOT + '/_checkStrikes',
-            // The object to pass to the server
-            {studentID: studentID},
-                  // The function to call with the response
-                  function(data) {
-                    // console.log(data['result']);
-                    // if (data['data']=='false'){
-                    //   strikeLimit();
-                    // }
                   }); // End of the call to getJSON
         };
 
