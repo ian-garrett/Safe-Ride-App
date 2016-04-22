@@ -164,21 +164,21 @@ def deleteRideRequest():
   return jsonify(result="delete success")
 
 
-# @app.route('/_checkStrikes')
-# def checkStrikes(studentID):
-#   """
-#   Check to see if user has three strikes, and if they do return false
-#   """
-#   studentID = request.args.get('studentID', 0, type=str)
-#   print("entering checkstrikes")
-#   strikes = collection.find( { "type": "user", "studentID": studentID } )
-#   strikeCount = strikes[0]["strikes"]
-#   print("strikes retrieved")
-#   if strikeCount>=3:
-#     print("strikes checked")
-#     return jsonify(result="true")
-#   print("if over")
-#   return jsonify(result="false")
+@app.route('/_checkStrikes')
+def checkStrikes():
+  """
+  Check to see if user has three strikes, and if they do return false
+  """
+  studentID = request.args.get('studentID', 0, type=str)
+  print("entering checkstrikes")
+  strikes = collection.find( { "type": "user", "studentID": studentID } )
+  # strikeCount = strikes[0]["strikes"]
+  # print("strikes retrieved")
+  # if strikeCount>=3:
+  #   print("strikes checked")
+  #   return jsonify(result="true")
+  # print("if over")
+  return jsonify(result="false")
 
 # USER FUNCTIONS
 
