@@ -1,119 +1,80 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
 <title>Safe Ride Dispatcher</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script
      src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js">
   </script>
-
   <link rel="stylesheet"
    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
    <script
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
   </script>
-
-   <link rel="stylesheet" href="/static/css/memos.css" />
-
+   <link rel="stylesheet" href="/static/css/safeRide.css" />
 </head>
 <body>
-
-
 <div id="dispatcherPage">
 <div id="dispatchHeader">
   <h1>Ride Queue</h1>
 </div>
 <div id="fullContainerDispatch">
-
 {% if session.rideRequests %}
     {% for rideRequest in session.rideRequests %}
-  <div id="{{ rideRequest._id }}" class="rideRequest">
-    <div class="row">
-    <div class="subrow">
-
-    <div class="col-xs-4">
-      <b class="secondaryColor">Name:</b> {{ rideRequest.name }}
-    </div>
-    <div class="col-xs-4">
-      <b class="secondaryColor" class="accent">Cellphone Number:</b> {{ rideRequest.cellphone }}
-    </div>
-    <div class="col-xs-4">
-      <b class="secondaryColor">Student ID:</b> {{ rideRequest.studentID }}
-    </div>
-    <div class="col-xs-4">
-      <b class="secondaryColor">Pickup Time:</b> {{ rideRequest.pickupTime }}
-    </div>
-    <div class="col-xs-4">
-      <b class="secondaryColor">Pickup Location:</b> {{ rideRequest.pickupLoc }}
-    </div>
-    <div class="col-xs-4">
-      <b class="secondaryColor">Dropoff Location:</b> {{ rideRequest.dropoffLoc }}
-    </div>
-    <div class="col-xs-4">
-      <b class="secondaryColor">Number of Passengers:</b> {{ rideRequest.passengers }}
-    </div>
-    <div class="col-xs-4">
-      <b class="secondaryColor">Number of Bikes:</b> {{ rideRequest.bikes }}
-    </div>
-
-
-
-    </div>
-    <div class="col-xs-12 col-sm-6">
-      <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Ride Completed</button>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-      <button id="strike" onclick="addStrike('{{rideRequest.studentID}}','{{rideRequest._id}}')">No-Show</button>
-    </div>
-    </div> <!-- row -->
-  </div> <!-- rideRequest -->
-  
+      {% if rideRequest.resolved == "false" %}
+      <div id="{{ rideRequest._id }}" class="rideRequest">
+        <div class="row">
+        <div class="subrow">
+        <div class="col-xs-4">
+          <b class="secondaryColor">Name:</b> {{ rideRequest.name }}
+        </div>
+        <div class="col-xs-4">
+          <b class="secondaryColor" class="accent">Cellphone Number:</b> {{ rideRequest.cellphone }}
+        </div>
+        <div class="col-xs-4">
+          <b class="secondaryColor">Student ID:</b> {{ rideRequest.studentID }}
+        </div>
+        <div class="col-xs-4">
+          <b class="secondaryColor">Pickup Time:</b> {{ rideRequest.pickupTime }}
+        </div>
+        <div class="col-xs-4">
+          <b class="secondaryColor">Pickup Location:</b> {{ rideRequest.pickupLoc }}
+        </div>
+        <div class="col-xs-4">
+          <b class="secondaryColor">Dropoff Location:</b> {{ rideRequest.dropoffLoc }}
+        </div>
+        <div class="col-xs-4">
+          <b class="secondaryColor">Number of Passengers:</b> {{ rideRequest.passengers }}
+        </div>
+        <div class="col-xs-4">
+          <b class="secondaryColor">Number of Bikes:</b> {{ rideRequest.bikes }}
+        </div>
+        </div>
+        <div class="col-xs-12">
+          <button id="assign" onclick="changeButtons('{{rideRequest._id}}')">Ride Completed</button>
+        </div>
+        <div id="buttonRow">
+        <div class="col-xs-12 col-sm-6">
+          <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Ride Completed</button>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <button id="strike" onclick="addStrike('{{rideRequest.studentID}}','{{rideRequest._id}}')">No-Show</button>
+        </div>
+        </div>
+        </div> <!-- row -->
+      </div> <!-- rideRequest -->
+    {% endif %}
   {% endfor %}
 {% else %}
   
 <!--   <p>No ride requests </p>  --> 
 {% endif %}
-
 </div> <!-- container -->
 </div> <!-- full dispatch page -->
-
 <!-- JS to insert into Python for DB processing  -->
 <script type="text/javascript">
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-
       //pass open times
-      $('#create').click(
-          // ... execute this function
-          function(){
-              var name = $('#name').val();
-              var cellphone = $('#cellphone').val();
-              var studentID = $('#studentID').val();
-              var pickupTime = $('#pickupTime').val();
-              var pickupLoc = $('#pickupLoc').val();
-              var dropoffLoc = $('#dropoffLoc').val();
-              var passengers = $('#passengers').val();
-              var bikes = $('#bikes').val();
-
-
-              //handle studentID check/user creation
-              checkID(studentID);
-
-
-              //AJAX call
-              $.getJSON($SCRIPT_ROOT + '/_createrideRequest',
-                  // The object to pass to the server
-                  {
-                    name: name, cellphone: cellphone, studentID: studentID, pickupTime: pickupTime, pickupLoc: pickupLoc, dropoffLoc: dropoffLoc, passengers, bikes
-                  },
-                  // The function to call with the response
-                  function(data) {
-                    //location.reload(true);
-                  }); // End of the call to getJSON
-
-     }); 
-
         function deleterideRequest(rideRequestID){
-
             var objectID = rideRequestID;
             console.log(objectID);
             $.getJSON($SCRIPT_ROOT + '/_delete',
@@ -121,12 +82,10 @@
             {objectID: objectID},
                   // The function to call with the response
                   function(data) {
-                    $("#"+rideRequestID).remove(); //Live delete, no need to reload :)
+                    $("#"+rideRequestID).remove(); //Live delete, no need to reload smile emoticon
                     // location.reload(true);
                   }); // End of the call to getJSON
         };
-
-
         function addStrike(studentID,rideRequestID){
             console.log(studentID);
             $.getJSON($SCRIPT_ROOT + '/_addStrike',
@@ -137,38 +96,11 @@
                     deleterideRequest(rideRequestID);
                   }); // End of the call to getJSON
         };
-
-
-        function createUser(studentID,name,cellphone){
-            $.getJSON($SCRIPT_ROOT + '/_createuser',
-            // The object to pass to the server
-            {studentID: studentID, name:name, cellphone:cellphone},
-                  // The function to call with the response
-                  function(data) {
-                    // deleterideRequest(rideRequestID);
-                    // alert("success");
-                  }); // End of the call to getJSON
+        function changeButtons(rideRequestID){
+            $("#"+rideRequestID+" #assign").hide();
+            $("#"+rideRequestID+" #buttonRow").css("display","inline");
         };
-
-        function checkID(studentID){
-            $.getJSON($SCRIPT_ROOT + '/_checkID',
-            // The object to pass to the server
-            {studentID: studentID},
-                  // The function to call with the response
-                  function(data) {
-                    if (data['result']=="true"){
-                      var name = $('#name').val();
-                      var cellphone = $('#cellphone').val();
-                      createUser(studentID,name,cellphone);
-                    }
-                    else{
-                    }
-                  }); // End of the call to getJSON
-        };
-
        
-
 </script>
-
 </body>
 </html>
