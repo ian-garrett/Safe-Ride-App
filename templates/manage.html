@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Safe Ride Account Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script
+     src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js">
+  </script>
+  <link rel="stylesheet"
+   href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+   <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
+  </script>
+   <link rel="stylesheet" href="/static/css/safeRide.css" />
+</head>
+<body>
+<div id="dispatchHeader">
+  <h1>Saferide Account Management:</h1>
+</div>
+<div id="fullContainerDispatcher" class="container">
+<h1>Create a dispatcher account</h1>
+<!--   Needed fields: Name, cellphone, studentID, pickuptime, pickupLoc, dropoffLoc, number of passengers, number of bikes  -->
+<div class="row">
+  <div class="col-xs-12 col-sm-6">
+    <label for="name">Name:</label><br>
+    <input type="text" class="form-control"
+     name="Name" id='name' placeholder="First Last"/>
+  </div>
+  <div class="col-xs-12 col-sm-6">
+    <label for="username">Username:</label><br>
+    <input type="text" class="form-control"
+     name="Userame" id='username' placeholder="First Last"/>
+  </div>
+  <div class="col-xs-12 col-sm-6">
+    <label for="password">Password:</label><br>
+    <input type="text" class="form-control"
+     name="Password" id='password' placeholder=""/>
+  </div>
+  <div class="col-xs-12 col-sm-6">
+    <label for="cellphone">Cellphone Number:</label><br>
+    <input type="text" class="form-control"
+      name="Cellphone" id='cellphone' placeholder="503-xxx-xxxx"/>
+  </div>
+  <div class="col-xs-12">
+    <button id="create">Create Dispatcher Account</button>
+  </div>
+ </div>
+</div> <!-- container -->
+<div id="fullContainerDispatch">
+{% if session.dispatchers %}
+    {% for dispatcher in session.dispatchers %}
+  <div id="{{ dispatcher._id }}" class="dispatcher">
+    <div class="row">
+      <h4>Dispatcher Account:</h4>
+    <div class="subrow">
+    <div class="col-xs-4">
+      <b class="secondaryColor">Name:</b><br> {{ dispatcher.name }}
+    </div>
+    <div class="col-xs-4">
+      <b class="secondaryColor" class="accent">Cellphone Number:</b><br> {{ dispatcher.cellphone }}
+    </div>
+    </div>
+    <div class="col-xs-4">
+      <button id="deleteDispatcher" onclick="deleteDispatcher('{{dispatcher._id}}')">Delete Account</button>
+    </div>
+    </div> <!-- row -->
+  </div> <!-- dispatcher -->
+  
+  {% endfor %}
+{% else %}
+  
+<!--   <p>No ride requests </p>  --> 
+{% endif %}
+</div> <!-- container -->
+<!-- JS to insert into Python for DB processing  -->
+<script type="text/javascript">
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      //pass open times
+      $('#create').click(
+          // ... execute this function
+          function(){
+              var name = $('#name').val();
+              var cellphone = $('#cellphone').val();
+              //AJAX call
+              $.getJSON($SCRIPT_ROOT + '/_createdispatcher',
+              // The object to pass to the server
+               {name:name, cellphone:cellphone},
+                  // The function to call with the response
+                  function(data) {
+                    location.reload(true);
+                  }); // End of the call to getJSON
+     }); 
+        function deleteDispatcher(dispatcherName){
+            var objectID = dispatcherName;
+            console.log(objectID);
+            $.getJSON($SCRIPT_ROOT + '/_deletedispatcher',
+            // The object to pass to the server
+            {objectID: objectID},
+                  // The function to call with the response
+                  function(data) {
+                    $("#"+dispatcherName).remove(); //Live delete, no need to reload smile emoticon
+                  }); // End of the call to getJSON
+        };
+       
+</script>
+</body>
+</html>
