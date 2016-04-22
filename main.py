@@ -172,12 +172,14 @@ def checkStrikes():
   studentID = request.args.get('studentID', 0, type=str)
   print("entering checkstrikes")
   strikes = collection.find( { "type": "user", "studentID": studentID } )
-  # strikeCount = strikes[0]["strikes"]
-  # print("strikes retrieved")
-  # if strikeCount>=3:
-  #   print("strikes checked")
-  #   return jsonify(result="true")
-  # print("if over")
+  strikeCount = strikes[0]["strikes"]
+  print("strikes retrieved")
+  print("STRIKECOUNT")
+  print(strikeCount)
+  if strikeCount>=3:
+    print("strikes checked")
+    return jsonify(result="true")
+  print("if over")
   return jsonify(result="false")
 
 # USER FUNCTIONS

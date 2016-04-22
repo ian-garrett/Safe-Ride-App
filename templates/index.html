@@ -127,7 +127,7 @@
                   },
                   // The function to call with the response
                   function(data) {
-                    $('#fullContainerDispatch').load(document.URL +  ' #fullContainerDispatch');
+                    confirmRide();
                     //location.reload(true);
                   }); // End of the call to getJSON
 
@@ -183,6 +183,25 @@
                       createUser(studentID,name,cellphone);
                     }
                     else{
+                      checkStrikes(studentID);
+                    }
+                  }); // End of the call to getJSON
+        };
+
+        function checkStrikes(studentID){
+            console.log(studentID);
+            console.log("check strikes called");
+
+            $.getJSON($SCRIPT_ROOT + '/_checkStrikes',
+            // The object to pass to the server
+            {studentID: studentID},
+                  // The function to call with the response
+                  function(data) {
+                    console.log("STRIKES CHECKED");
+                    console.log(data['result']);
+                    // console.log(data['result']);
+                    if (data['result']=='true'){
+                      strikeLimit();
                     }
                   }); // End of the call to getJSON
         };
