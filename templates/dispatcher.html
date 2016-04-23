@@ -27,9 +27,9 @@
 
 
 {% if session.rideRequests %}
+<!-- <h1>RIDES TO BE ASSIGNED:</h1> -->
     {% for rideRequest in session.rideRequests %}
       {% if rideRequest.resolved == "false" %}
-      <h1>RIDES TO ASSIGN:</h1>
       <div id="{{ rideRequest._id }}" class="rideRequest">
         <div class="row">
         <div class="subrow">
@@ -58,6 +58,9 @@
         <div class="col-xs-4">
           <b class="secondaryColor">Number of Bikes:</b><br> {{ rideRequest.bikes }}
         </div>
+<!--         <div class="col-xs-4">
+          <b class="secondaryColor">Assigned:</b><br> {{ rideRequest.assigned }}
+        </div> -->
 
 
 
@@ -78,57 +81,6 @@
     {% endif %}
   {% endfor %}
 
-  <h1>ASSIGNED RIDES:</h1>
-  <!-- assigned rides list -->
-  {% for rideRequest in session.rideRequests %}
-      {% if rideRequest.resolved == "true" %}
-      <div id="{{ rideRequest._id }}" class="rideRequest">
-        <div class="row">
-        <div class="subrow">
-
-        <div class="col-xs-4">
-          <b class="secondaryColor">Name:</b><br> {{ rideRequest.name }}
-        </div>
-        <div class="col-xs-4">
-          <b class="secondaryColor" class="accent">Cellphone Number:</b><br> {{ rideRequest.cellphone }}
-        </div>
-        <div class="col-xs-4">
-          <b class="secondaryColor">Student ID:</b><br> {{ rideRequest.studentID }}
-        </div>
-        <div class="col-xs-4">
-          <b class="secondaryColor">Pickup Time:</b><br> {{ rideRequest.pickupTime }}
-        </div>
-        <div class="col-xs-4">
-          <b class="secondaryColor">Pickup Location:</b><br> {{ rideRequest.pickupLoc }}
-        </div>
-        <div class="col-xs-4">
-          <b class="secondaryColor">Dropoff Location:</b><br> {{ rideRequest.dropoffLoc }}
-        </div>
-        <div class="col-xs-4">
-          <b class="secondaryColor">Number of Passengers:</b><br> {{ rideRequest.passengers }}
-        </div>
-        <div class="col-xs-4">
-          <b class="secondaryColor">Number of Bikes:</b><br> {{ rideRequest.bikes }}
-        </div>
-
-
-
-        </div>
-        <div class="col-xs-12">
-          <button id="assign" onclick="changeButtons('{{rideRequest._id}}')">Ride Completed</button>
-        </div>
-        <div id="buttonRow">
-        <div class="col-xs-12 col-sm-6">
-          <button id="delete" onclick="deleterideRequest('{{rideRequest._id}}')">Ride Completed</button>
-        </div>
-        <div class="col-xs-12 col-sm-6">
-          <button id="strike" onclick="addStrike('{{rideRequest.studentID}}','{{rideRequest._id}}')">No-Show</button>
-        </div>
-        </div>
-        </div> <!-- row -->
-      </div> <!-- rideRequest -->
-    {% endif %}
-  {% endfor %}
 
 {% else %}
   
@@ -144,6 +96,7 @@
 
       //pass open times
 
+        //makes AJAX call to pass along the rideRequestID for DB deletion
         function deleterideRequest(rideRequestID){
             var objectID = rideRequestID;
             console.log(objectID);
@@ -152,8 +105,7 @@
             {objectID: objectID},
                   // The function to call with the response
                   function(data) {
-                    $("#"+rideRequestID).remove(); //Live delete, no need to reload smile emoticon
-                    // location.reload(true);
+                    $("#"+rideRequestID).remove(); //Live delete, no need to reload page
                   }); // End of the call to getJSON
         };
 
@@ -163,7 +115,6 @@
             $.getJSON($SCRIPT_ROOT + '/_addStrike',
             // The object to pass to the server
             {studentID: studentID},
-                  // The function to call with the response
                   function(data) {
                     deleterideRequest(rideRequestID);
                   }); // End of the call to getJSON
@@ -172,14 +123,28 @@
         function changeButtons(rideRequestID){
             $("#"+rideRequestID+" #assign").hide();
             $("#"+rideRequestID+" #buttonRow").css("display","inline");
-            $.getJSON($SCRIPT_ROOT + '/_assignRide',
-            // The object to pass to the server
-            {rideRequestID: rideRequestID},
-                  // The function to call with the response
-                  function(data) {
-                    // deleterideRequest(rideRequestID);
-                  }); // End of the call to getJSON
+            // $.getJSON($SCRIPT_ROOT + '/_assignRide',
+            // // The object to pass to the server
+            // {rideRequestID: rideRequestID},
+            //       // The function to call with the response
+            //       function(data) {
+            //         // deleterideRequest(rideRequestID);
+            //       }); // End of the call to getJSON
         };
+
+        function checkFields(){
+          //function to provide user feedback based on incomplete form fields
+          var incomplete = "false";
+          $("#errorField").empty();
+          $('.form-control').each(function(){
+            if ($(this).val().length==0){
+              incomplete = "true";
+                  $("#errorField").append( "<p>- Please enter your "+$(this).attr("name")+"</p>" );
+                }
+              })
+          return(incomplete);
+
+           }
 
        
 

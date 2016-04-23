@@ -147,7 +147,6 @@ def createrideRequest():
   dropoffLoc = request.args.get('dropoffLoc', 0, type=str)
   passengers = request.args.get('passengers', 0, type=int)
   bikes = request.args.get('bikes', 0, type=int)
-  passFail = request.args.get('bikes', 0, type=str)
 
   put_rideRequest(name,cellphone,studentID,pickupTime,pickupLoc,dropoffLoc,passengers,bikes) 
   return jsonify(result="add success")
@@ -233,15 +232,15 @@ def addStrike():
   return jsonify(result="add success")
 
 
-@app.route("/_assignRide")
-def assignRide():
-  """
-  Calls function to change rides activation state
-  """
-  rideRequestID = request.args.get('rideRequestID', 0, type=str)
-  # ride = collection.find( { "type": "rideRequest", "rideRequestID": rideRequestID } )
-  collection.find_one_and_update({"_id": rideRequestID}, {"$set": {"assigned": "true"}})
-  return jsonify(result="add success")
+# @app.route("/_assignRide")
+# def assignRide():
+#   """
+#   Calls function to change rides activation state
+#   """
+#   rideRequestID = request.args.get('rideRequestID', 0, type=str)
+#   # ride = collection.find( { "type": "rideRequest", "rideRequestID": rideRequestID } )
+#   collection.find_one_and_update({"_id": rideRequestID}, {"$set": {"assigned": "true"}})
+#   return jsonify(result="add success")
 
 
 # MANAGE FUNCTIONS

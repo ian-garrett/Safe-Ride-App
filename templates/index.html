@@ -116,6 +116,7 @@
               // var notes = $('#notes').val();
               var incomplete = checkFields();
               if (incomplete=="true"){
+                $("html, body").animate({ scrollTop: 0 }, "slow");
                 return;
               }
 
@@ -173,13 +174,13 @@
         };
 
         function checkFields(){
-          //Will expand on this to give specific feedback on fields, highlight empties in red. Will also type check later.
-          //Find backend way to do this, doing it based on html fields is very insecure. This was for demonstration purposes
+          //function to provide user feedback based on incomplete form fields
           var incomplete = "false";
+          $("#errorField").empty();
           $('.form-control').each(function(){
             if ($(this).val().length==0){
               incomplete = "true";
-                  $("#errorField").append( "<p>Please enter your "+$(this).attr("name")+"</p>" );
+                  $("#errorField").append( "<p>- Please enter your "+$(this).attr("name")+"</p>" );
                 }
               })
           return(incomplete);
@@ -216,9 +217,11 @@
             checkID(studentID);
           }
           else{
-            $("#errorField").append( "<p>Please enter your studentID so we can check your eligibility</p>" );
+            $("#errorField").append( "<p>- Please enter your studentID so we can check your eligibility</p>" );
+            $("html, body").animate({ scrollTop: 0 }, "slow");
             $('#create').prop("disabled",true);
             $('#create').css('display','none');
+            $('#myCheckbox').attr('checked', false);
           }
 
         })

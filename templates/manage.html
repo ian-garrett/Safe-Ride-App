@@ -98,6 +98,7 @@
                     location.reload(true);
                   }); // End of the call to getJSON
      }); 
+
         function deleteDispatcher(dispatcherName){
             var objectID = dispatcherName;
             console.log(objectID);
@@ -109,6 +110,20 @@
                     $("#"+dispatcherName).remove(); //Live delete, no need to reload smile emoticon
                   }); // End of the call to getJSON
         };
+
+        function checkFields(){
+          //function to provide user feedback based on incomplete form fields
+          var incomplete = "false";
+          $("#errorField").empty();
+          $('.form-control').each(function(){
+            if ($(this).val().length==0){
+              incomplete = "true";
+                  $("#errorField").append( "<p>- Please enter your "+$(this).attr("name")+"</p>" );
+                }
+              })
+          return(incomplete);
+
+           }
        
 </script>
 </body>
