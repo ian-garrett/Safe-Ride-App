@@ -52,17 +52,17 @@ def dispatcher():
   password = request.args.get('password')
 
   # allows for any dispatcher registered in the db to access the dispatcher page
-  for dispatcher in collection.find( { "type": "dispatcher" } ).sort("name", 1):
-        if dispatcher['username']==username and dispatcher['password']==password:
-          return flask.render_template('dispatcher.html')
+  # for dispatcher in collection.find( { "type": "dispatcher" } ).sort("name", 1):
+  #       if dispatcher['username']==username and dispatcher['password']==password:
+  #         return flask.render_template('dispatcher.html')
 
 
-  return flask.render_template('loginFail.html')
+  # return flask.render_template('loginFail.html')
 
   # this hardcoded check will suffice for the current scope of the project and demonstration purposes
-  # if username=="igarrett" and password=="maythesourcebewithyou":
-  #   return flask.render_template('dispatcher.html')
-  # return flask.render_template('loginFail.html')
+  if username=="igarrett" and password=="password":
+    return flask.render_template('dispatcher.html')
+  return flask.render_template('loginFail.html')
 
 
 @app.route("/manage")
@@ -232,6 +232,18 @@ def addStrike():
   print("finished incrementStike")
   return jsonify(result="add success")
 
+
+@app.route("/_assignRide")
+def assignRide():
+  """
+  Calls function to change rides activation state
+  """
+  rideRequestID = request.args.get('rideRequestID', 0, type=str)
+  # ride = collection.find( { "type": "rideRequest", "rideRequestID": rideRequestID } )
+  collection.find_one_and_update({"_id": rideRequestID}, {"$set": {"assigned": "true"}})
+  return jsonify(result="add success")
+
+
 # MANAGE FUNCTIONS
 
 # dispatcher functions
@@ -297,6 +309,7 @@ def deleteDispatcher():
 def checkID():
   """
   check if a user had has an account
+  IMPROVE: Check if user has a non resolved ride in the queue; if so, reject ride
   """
   studentID = request.args.get('studentID', 0, type=str)
   entryCount = collection.find( { "type": "user", "studentID": studentID } ).count();

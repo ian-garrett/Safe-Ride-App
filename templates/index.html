@@ -206,6 +206,7 @@
         //FUNCTION BINDINGS
 
         $('#agree').change(function(){
+          //Go back and clean this up: disable box until student id box is populated
           $("#errorField").empty();
           var checked = $('#agree').is(":checked");
           var studentID = $('#studentID').val();
