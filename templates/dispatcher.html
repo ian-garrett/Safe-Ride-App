@@ -92,6 +92,7 @@
 
 <!-- JS to insert into Python for DB processing  -->
 <script type="text/javascript">
+setTimeout('window.location.href=window.location.href;', 30000);
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 
       //pass open times
@@ -131,20 +132,6 @@
             //         // deleterideRequest(rideRequestID);
             //       }); // End of the call to getJSON
         };
-
-        function checkFields(){
-          //function to provide user feedback based on incomplete form fields
-          var incomplete = "false";
-          $("#errorField").empty();
-          $('.form-control').each(function(){
-            if ($(this).val().length==0){
-              incomplete = "true";
-                  $("#errorField").append( "<p>- Please enter your "+$(this).attr("name")+"</p>" );
-                }
-              })
-          return(incomplete);
-
-           }
 
        
 
