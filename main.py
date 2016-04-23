@@ -20,11 +20,11 @@ app = flask.Flask(__name__)
 
 try: 
     dbclient = MongoClient(CONFIG.MONGO_URL)
-    db = dbclient.memos # reuseing DB from old project
+    db = dbclient.memos # reuseing DB
     collection = db.dated
 
 except:
-    print("Failure opening database. Is Mongo running? Correct password?")
+    print("Failure opening database.")
     sys.exit(1)
 
 import uuid
@@ -51,18 +51,18 @@ def dispatcher():
   username = request.args.get('username')
   password = request.args.get('password')
 
-  # this will allow to check database for when multiple users have been created
-  # for dispatcher in collection.find( { "type": "dispatcher" } ).sort("name", 1):
-  #       if dispatcher['username']==username and dispatcher['password']==password:
-  #         return flask.render_template('dispatcher.html')
+  # allows for any dispatcher registered in the db to access the dispatcher page
+  for dispatcher in collection.find( { "type": "dispatcher" } ).sort("name", 1):
+        if dispatcher['username']==username and dispatcher['password']==password:
+          return flask.render_template('dispatcher.html')
 
 
-  # return flask.render_template('loginFail.html')
+  return flask.render_template('loginFail.html')
 
   # this hardcoded check will suffice for the current scope of the project and demonstration purposes
-  if username=="igarrett" and password=="maythesourcebewithyou":
-    return flask.render_template('dispatcher.html')
-  return flask.render_template('loginFail.html')
+  # if username=="igarrett" and password=="maythesourcebewithyou":
+  #   return flask.render_template('dispatcher.html')
+  # return flask.render_template('loginFail.html')
 
 
 @app.route("/manage")
@@ -82,7 +82,7 @@ def manage():
   # return flask.render_template('loginFail.html')
 
   # this hardcoded check will suffice for the current scope of the project and demonstration purposes
-  if username=="igarrett" and password=="maythesourcebewithyou":
+  if username=="igarrett" and password=="password":
     return flask.render_template('manage.html')
   return flask.render_template('loginFail.html')
 
@@ -250,7 +250,7 @@ def get_dispatchers():
         records.append(record)
     return records
 
-def put_dispatcher(name, cellphone):
+def put_dispatcher(name, cellphone, username, password):
     """
     Place dispatcher into database with appropriate attributes
     """
@@ -258,8 +258,10 @@ def put_dispatcher(name, cellphone):
     record = { "type": "dispatcher",
                "name": name,
                "cellphone": cellphone,
+               "username": username,
+               "password": password,
    }
-    print("about to inert dispatcher")
+    print("about to insert dispatcher")
     collection.insert(record)
     return
 
@@ -272,7 +274,9 @@ def createdispatcher():
   print("entered createdispatcher")
   name = request.args.get('name', 0, type=str)
   cellphone = request.args.get('cellphone', 0, type=str)
-  put_dispatcher(name,cellphone)
+  username = request.args.get('username', 0, type=str)
+  password = request.args.get('password', 0, type=str)
+  put_dispatcher(name,cellphone,username,password)
   return jsonify(result="add success")
 
 

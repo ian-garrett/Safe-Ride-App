@@ -25,6 +25,7 @@ label[for="agree"]{
 	position: relative;
     font-size: 21px;
     margin-left: 2px;
+    margin-bottom: 10px;
 }
 
 input {
@@ -181,11 +182,15 @@ h1 {
 #deleteDispatcher {
 	background-color: #FF7772;
 	border-color: #FF7772;
-	margin-bottom: 0;
+	margin: 10px 0 0 0;
 }
 
 .dispatcher h4 {
 	margin-left: 15px;
+}
+
+.col-xs-6:not(b){
+	color:white;
 }
 
 /*Mobile styling*/

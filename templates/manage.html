@@ -33,7 +33,7 @@
   <div class="col-xs-12 col-sm-6">
     <label for="username">Username:</label><br>
     <input type="text" class="form-control"
-     name="Userame" id='username' placeholder="Keep it appropriate"/>
+     name="Userame" id='username' placeholder="Go wild"/>
   </div>
   <div class="col-xs-12 col-sm-6">
     <label for="password">Password:</label><br>
@@ -52,14 +52,20 @@
     <div class="row">
       <h4>Dispatcher Account:</h4>
     <div class="subrow">
-    <div class="col-xs-4">
+    <div class="col-xs-6">
       <b class="secondaryColor">Name:</b><br> {{ dispatcher.name }}
     </div>
-    <div class="col-xs-4">
+    <div class="col-xs-6">
       <b class="secondaryColor" class="accent">Cellphone Number:</b><br> {{ dispatcher.cellphone }}
     </div>
+        <div class="col-xs-6">
+      <b class="secondaryColor" class="accent">Username:</b><br> {{ dispatcher.username }}
     </div>
-    <div class="col-xs-4">
+        <div class="col-xs-6">
+      <b class="secondaryColor" class="accent">Password:</b><br> {{ dispatcher.password }}
+    </div>
+    </div>
+    <div class="col-xs-12">
       <button id="deleteDispatcher" onclick="deleteDispatcher('{{dispatcher._id}}')">Delete Account</button>
     </div>
     </div> <!-- row -->
@@ -80,10 +86,13 @@
           function(){
               var name = $('#name').val();
               var cellphone = $('#cellphone').val();
+              var username = $('#username').val();
+              var password = $('#password').val(); 
+
               //AJAX call
               $.getJSON($SCRIPT_ROOT + '/_createdispatcher',
               // The object to pass to the server
-               {name:name, cellphone:cellphone},
+               {name:name, cellphone:cellphone, username:username, password:password},
                   // The function to call with the response
                   function(data) {
                     location.reload(true);
