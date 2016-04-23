@@ -16,6 +16,11 @@ body {
 	height: 22px;
 }
 
+#errorField {
+	color: #FF7772;
+	font-size: 16px;
+}
+
 label[for="agree"]{
 	position: relative;
     font-size: 21px;

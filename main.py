@@ -180,14 +180,12 @@ def checkStrikes():
 
 # create user functions
 
-def put_user(name, cellphone, studentID):
+def put_user(studentID):
     """
     Place user into database with appropriate attributes
     """
-    print(name,cellphone,studentID)
+    print(studentID)
     record = { "type": "user",
-               "name": name,
-               "cellphone": cellphone,
                "studentID": studentID,
                "strikes": 0
    }
@@ -200,11 +198,9 @@ def createuser():
   """
   Get request info and create user user input
   """
-  name = request.args.get('name', 0, type=str)
-  cellphone = request.args.get('cellphone', 0, type=str)
   studentID = request.args.get('studentID', 0, type=str)
 
-  put_user(name,cellphone,studentID)
+  put_user(studentID)
   return jsonify(result="add success")
 
 # user strike functions
